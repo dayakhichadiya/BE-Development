@@ -1,0 +1,42 @@
+src/
+│
+├── config/
+├── middlewares/
+├── modules/
+├── utils/
+│
+├── app.js
+└── server.js
+
+add in package.json to start the backend server 
+scripts": {
+     "start": "node src/server.js",
+   "dev": "nodemon src/server.js"
+  },
+
+1. create app.js
+        with require express and cors.
+
+2. create config/db.js 
+        to connect mongodb within mongoose.connect env mongo_db uri
+        and process.exit in catch err handling.
+3. create server.js 
+        to connect both app.js and db.js 
+        require dotenv.config
+        const require app and connectDB from the app and db.js
+        call the function connectDB
+        define port Variables from the Env
+        app-listen port console-log to show server is running on port 5000
+
+
+
+Current Project State
+✔ Express Setup
+✔ Environment Variables
+✔ MongoDB Connection
+✔ app.js
+✔ server.js
+✔ CORS
+✔ JSON Parser
+✔ Nodemon
+✔ Git Ignore
