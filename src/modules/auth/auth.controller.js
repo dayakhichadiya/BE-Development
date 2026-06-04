@@ -40,8 +40,34 @@ const getProfile = (req, res) => {
     })
 }
 
+const updateProfile = async (req, res, next) => {
+    try {
+        const user = await authService.updateProfile(req.user._id, req.body);
+        res.status(200).json({
+            message: "User profile updated succeessfully",
+            data: user
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+const changePassword = async (req, res, next) => {
+    try {
+        await authService.changePassword(req.user._id, req.body);
+        res.status(200).json({
+            success: true,
+            message: "Password Upadted Successfully"
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     register,
     login,
     getProfile,
+    updateProfile,
+    changePassword,
 }

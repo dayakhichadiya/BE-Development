@@ -1,6 +1,7 @@
 const User = require("./user.model");
 const bcrypt = require("bcrypt");
-const { generateToken } = require('../../utils/jwt')
+const { generateToken } = require('../../utils/jwt');
+
 const registerUser = async (payload) => {
 
     const { name, email, password } = payload;
@@ -56,7 +57,37 @@ const loginUser = async (payload) => {
     };
 }
 
+const updateProfile = async (userId, payload) => {
+    const user = await User.findByIdAndUpdate(userId, payload, {
+        new: true, // Without it:returns old data.
+        runValidators: true, //ensures schema validation runs during updates.
+    }).select("-password");
+
+    return user;
+}
+
+const changePassword = async (userId, payload) => {
+    const { oldPassword, newPassword } = payload;
+
+    const user = await User.findById(userId).select("+password");
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isMatch) {
+        throw new Error("Enter correct Old password");
+    }
+
+    const hashedPass = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPass;
+
+    await user.save();
+
+    return true;
+}
+
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    updateProfile,
+    changePassword,
 }
