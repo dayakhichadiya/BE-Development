@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const authRoutes = require("./modules/auth/auth.routes")
+const productRoutes = require("./modules/products/product.routes");
 const app = express();
 
 app.use(cors());    // allow frontend requests
@@ -9,6 +10,7 @@ app.use(express.json());   // Express can't read JSON automatically   without ex
 
 
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 
 
 // TEST CONNECTION WITH WEB
