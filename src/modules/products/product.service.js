@@ -1,14 +1,10 @@
 const Product = require("./product.model");
 
-const createProduct = async (
-    payload,
-    userId
-) => {
-    const product =
-        await Product.create({
-            ...payload,
-            createdBy: userId,
-        });
+const createProduct = async (payload, userId) => {
+    const product = await Product.create({
+        ...payload,
+        createdBy: userId,
+    });
 
     return product;
 };
@@ -38,7 +34,7 @@ const updateProduct = async (productId, payload) => {
 const deleteProduct = async (productId) => {
     const product = await Product.findByIdAndDelete(productId);
 
-    if(!product){
+    if (!product) {
         throw new Error('Poduct not found');
     }
     return product;
