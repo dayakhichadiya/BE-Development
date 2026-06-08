@@ -31,6 +31,21 @@ const getProduct = async (req, res) => {
     }
 }
 
+const getAllProduct = async (req, res, next) => {
+    try {
+        const result = await productService.getAllProduct(req.query);
+        console.log("🚀 ~ getAllProduct ~ result:", result)
+        res.status(200).json({
+            success: true,
+            message: "Fetch all Products",
+            data: result.products,
+            pagination: result.pagination
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
 const updateProduct = async (req, res, next) => {
     try {
         const product = await productService.updateProduct(req.params.id, req.body)
@@ -63,5 +78,6 @@ module.exports = {
     createProduct,
     getProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getAllProduct
 };

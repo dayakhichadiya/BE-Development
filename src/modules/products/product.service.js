@@ -18,6 +18,48 @@ const getProduct = async (productId) => {
     return product;
 }
 
+const getAllProduct = async (query) => {
+
+    const { search, page = 1, limit = 10 } = query;
+
+    let filter = {};
+
+    if (search) {
+        filter.$or = [
+            {
+                name: {
+                    $regex: search,
+                    $options: "i",
+                },
+            },
+            {
+                description: {
+                    $regex: search,
+                    $options: "i",
+                },
+            },
+        ]
+    }
+
+    const skip = (Number(page) - 1) * Number(limit);
+    const totalProducts = await Product.countDocuments(filter);
+
+    const products =
+        await Product.find(filter)
+            .skip(skip)
+            .limit(Number(limit));
+
+    return {
+        products,
+        pagination: {
+            currentPage: Number(page),
+            totalPages: Math.ceil(totalProducts / limit),
+            totalProducts,
+            limit: Number(limit)
+        }
+    }
+}
+
 const updateProduct = async (productId, payload) => {
     const product = await Product.findByIdAndUpdate(productId, payload, {
         new: true,
@@ -43,6 +85,7 @@ const deleteProduct = async (productId) => {
 module.exports = {
     createProduct,
     getProduct,
+    getAllProduct,
     updateProduct,
     deleteProduct,
 }
