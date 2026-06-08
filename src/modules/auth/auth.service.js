@@ -85,9 +85,25 @@ const changePassword = async (userId, payload) => {
     return true;
 }
 
+const getAllUser = async (query) => {
+    const { search } = query;
+
+    let filter = {};
+
+    if (search) {
+        filter.name = {
+            $regex: search,
+            $options: "i", // i means case insensetive = i, I, any of the capital or small
+        }
+    }
+    const users = await User.find(filter);
+    return users;
+}
+
 module.exports = {
     registerUser,
     loginUser,
     updateProfile,
     changePassword,
+    getAllUser
 }

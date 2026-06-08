@@ -1,14 +1,10 @@
 const Product = require("./product.model");
 
-const createProduct = async (
-    payload,
-    userId
-) => {
-    const product =
-        await Product.create({
-            ...payload,
-            createdBy: userId,
-        });
+const createProduct = async (payload, userId) => {
+    const product = await Product.create({
+        ...payload,
+        createdBy: userId,
+    });
 
     return product;
 };
@@ -20,6 +16,48 @@ const getProduct = async (productId) => {
         throw new Error('Product Id not found')
     }
     return product;
+}
+
+const getAllProduct = async (query) => {
+
+    const { search, page = 1, limit = 10 } = query;
+
+    let filter = {};
+
+    if (search) {
+        filter.$or = [
+            {
+                name: {
+                    $regex: search,
+                    $options: "i",
+                },
+            },
+            {
+                description: {
+                    $regex: search,
+                    $options: "i",
+                },
+            },
+        ]
+    }
+
+    const skip = (Number(page) - 1) * Number(limit);
+    const totalProducts = await Product.countDocuments(filter);
+
+    const products =
+        await Product.find(filter)
+            .skip(skip)
+            .limit(Number(limit));
+
+    return {
+        products,
+        pagination: {
+            currentPage: Number(page),
+            totalPages: Math.ceil(totalProducts / limit),
+            totalProducts,
+            limit: Number(limit)
+        }
+    }
 }
 
 const updateProduct = async (productId, payload) => {
@@ -38,7 +76,7 @@ const updateProduct = async (productId, payload) => {
 const deleteProduct = async (productId) => {
     const product = await Product.findByIdAndDelete(productId);
 
-    if(!product){
+    if (!product) {
         throw new Error('Poduct not found');
     }
     return product;
@@ -47,6 +85,7 @@ const deleteProduct = async (productId) => {
 module.exports = {
     createProduct,
     getProduct,
+    getAllProduct,
     updateProduct,
     deleteProduct,
 }
