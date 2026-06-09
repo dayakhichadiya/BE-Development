@@ -20,7 +20,11 @@ const getProduct = async (productId) => {
 
 const getAllProduct = async (query) => {
 
-    const { search, page = 1, limit = 10 } = query;
+    const { search,
+        page = 1,
+        limit = 10,
+        sort
+    } = query;
 
     let filter = {};
 
@@ -41,11 +45,22 @@ const getAllProduct = async (query) => {
         ]
     }
 
+    let sortOption = {};
+
+    if (sort) {
+        if (sort.startsWith("-")) {
+            sortOption[sort.substring(1)] = -1
+        } else {
+            sortOption[sort] = 1
+        }
+    }
+
     const skip = (Number(page) - 1) * Number(limit);
     const totalProducts = await Product.countDocuments(filter);
 
     const products =
         await Product.find(filter)
+            .sort(sortOption)
             .skip(skip)
             .limit(Number(limit));
 

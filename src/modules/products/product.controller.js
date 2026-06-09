@@ -34,7 +34,6 @@ const getProduct = async (req, res) => {
 const getAllProduct = async (req, res, next) => {
     try {
         const result = await productService.getAllProduct(req.query);
-        console.log("🚀 ~ getAllProduct ~ result:", result)
         res.status(200).json({
             success: true,
             message: "Fetch all Products",

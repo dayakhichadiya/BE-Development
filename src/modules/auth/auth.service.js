@@ -86,7 +86,11 @@ const changePassword = async (userId, payload) => {
 }
 
 const getAllUser = async (query) => {
-    const { search } = query;
+    const { search,
+        page = 1,
+        limit = 10, 
+        sort
+    } = query;
 
     let filter = {};
 
@@ -96,8 +100,35 @@ const getAllUser = async (query) => {
             $options: "i", // i means case insensetive = i, I, any of the capital or small
         }
     }
-    const users = await User.find(filter);
-    return users;
+
+    let sortOption = {};
+
+    if (sort) {
+        if (sort.startsWith("-")) {
+            sortOption[sort.substring(1)] = -1;
+        } else {
+            sortOption[sort] = 1
+        }
+    }
+
+    const skip = (Number(page) - 1) * Number(limit);
+    const totalUsers = await User.countDocuments(filter);
+
+    const users =
+        await User.find(filter)
+            .sort(sortOption)
+            .skip(skip)
+            .limit(Number(limit));
+
+    return {
+        users,
+        pagination: {
+            currentPage: Number(page),
+            totalPages: Math.ceil(totalUsers / limit),
+            totalUsers,
+            limit: Number(limit)
+        }
+    };
 }
 
 module.exports = {
