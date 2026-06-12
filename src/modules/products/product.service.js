@@ -75,6 +75,14 @@ const getAllProduct = async (query) => {
     }
 }
 
+const getProductWithCategory = async () => {
+
+    const products = await Product.find()
+        .populate("category", "name") //give the response with category details.
+        .populate("createdBy", "name email");  //give the name of the product creater
+    return products
+}
+
 const updateProduct = async (productId, payload) => {
     const product = await Product.findByIdAndUpdate(productId, payload, {
         new: true,
@@ -103,4 +111,5 @@ module.exports = {
     getAllProduct,
     updateProduct,
     deleteProduct,
+    getProductWithCategory,
 }

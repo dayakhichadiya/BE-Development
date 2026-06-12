@@ -37,7 +37,6 @@ const getAllCategory = async () => {
 
 const deleteCategory = async (id) => {
     const category = await Category.findByIdAndDelete(id);
-    console.log("🚀 ~ deleteCategory ~ category:", category)
 
     if(!category){
         throw new Error('category Id not found');

@@ -18,7 +18,7 @@ const createProduct = async (req, res, next) => {
     }
 };
 
-const getProduct = async (req, res) => {
+const getProduct = async (req, res, next) => {
     try {
         const product = await productService.getProduct(req.params.id)
 
@@ -39,6 +39,19 @@ const getAllProduct = async (req, res, next) => {
             message: "Fetch all Products",
             data: result.products,
             pagination: result.pagination
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+const getProductWithCategory = async (req, res, next) => {
+    try {
+        const product = await productService.getProductWithCategory();
+        res.status(200).json({
+            success: true,
+            message: "Fetch all Products",
+            data: product,
         })
     } catch (error) {
         next(error);
@@ -78,5 +91,6 @@ module.exports = {
     getProduct,
     updateProduct,
     deleteProduct,
-    getAllProduct
+    getAllProduct,
+    getProductWithCategory
 };
