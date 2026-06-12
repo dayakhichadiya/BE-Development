@@ -1,3 +1,4 @@
+const catchAsync = require("../../utils/catchAsync");
 const productService = require("./product.service");
 
 const createProduct = async (req, res, next) => {
@@ -45,18 +46,16 @@ const getAllProduct = async (req, res, next) => {
     }
 }
 
-const getProductWithCategory = async (req, res, next) => {
-    try {
-        const product = await productService.getProductWithCategory();
-        res.status(200).json({
-            success: true,
-            message: "Fetch all Products",
-            data: product,
-        })
-    } catch (error) {
-        next(error);
-    }
-}
+const getProductWithCategory = catchAsync(async (req, res, next) => { //why catchAsync <- no need to write everywhere try/catch
+
+    const product = await productService.getProductWithCategory();
+    res.status(200).json({
+        success: true,
+        message: "Fetch all Products",
+        data: product,
+    })
+
+})
 
 const updateProduct = async (req, res, next) => {
     try {

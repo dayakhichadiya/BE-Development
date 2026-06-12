@@ -17,8 +17,8 @@ const {
 router.post("/", protect, authorize("admin"), createProduct);
 router.get("/category-wise", getProductWithCategory);
 router.get("/:id", getProduct);
-router.put("/:id", protect, authorize("admin"), updateProduct); //need to add
-router.delete("/:id", protect, authorize("admin"), deleteProduct); //need to add here
+router.put("/:id", protect, authorize("admin"), updateProduct);
+router.delete("/:id", protect, authorize("admin"), deleteProduct);
 router.get("/", getAllProduct);
 
 module.exports = router;

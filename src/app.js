@@ -3,7 +3,8 @@ const cors = require('cors');
 
 const authRoutes = require("./modules/auth/auth.routes")
 const productRoutes = require("./modules/products/product.routes");
-const categoryRoutes = require("./modules/categories/category.routes")
+const categoryRoutes = require("./modules/categories/category.routes");
+const ErrorHandler = require('./middlewares/error.middleware');
 const app = express();
 
 app.use(cors());    // allow frontend requests
@@ -23,5 +24,10 @@ app.get("/", (req, res) => {
         message: "API Running"
     })
 })
+
+
+// must be in last
+app.use(ErrorHandler);
+
 
 module.exports = app;
