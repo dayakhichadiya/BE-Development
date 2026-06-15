@@ -108,3 +108,83 @@ Use when:
 
 You need middleware/hooks.
 Modifying an existing document instance.
+
+
+User (Postman / Frontend)
+        ↓
+Express API (Node.js)
+        ↓
+Multer (reads file)
+        ↓
+Cloudinary (stores image)
+        ↓
+MongoDB (stores image URL)
+
+
+1. 📩 User sends request (Postman / Frontend)
+In Postman you send:
+Body → form-data
+
+| KEY    | TYPE | VALUE          |
+| ------ | ---- | -------------- |
+| images | File | (select image) |
+| name   | Text | Nature         |
+| price  | Text | 500            |
+| stock  | Text | 2              |
+
+
+
+🔁 FULL FLOW SUMMARY (VERY IMPORTANT)
+
+1. User sends form-data request (image + text)
+
+2. Express receives request
+
+3. Multer:
+   - extracts file
+   - puts it in req.file.buffer
+
+4. Cloudinary:
+   - receives buffer
+   - stores image in cloud
+   - returns image URL
+
+5. MongoDB:
+   - stores product data
+   - stores only image URL
+
+6. Frontend:
+   - uses URL to display image
+
+🧑 User → gives you a photo
+📦 Multer → holds photo temporarily in your hand
+☁️ Cloudinary → your warehouse where you store photos
+🗄️ MongoDB → notebook where you write “photo is stored here”
+
+👉 Multer = receives file
+👉 Cloudinary = stores file
+👉 MongoDB = stores link
+
+
+3. 🧵 What Multer does
+
+Multer is a file extractor middleware.
+
+It:
+Looks at request
+Finds file field "images"
+Extracts file
+Stores it in memory (because you used memoryStorage)
+
+req.body = {
+  name: "Nature",
+  price: "500",
+  stock: "2"
+}
+
+req.file = {
+  fieldname: "images",
+  originalname: "adminSite.jpg",
+  mimetype: "image/jpeg",
+  buffer: <Binary Data>
+}

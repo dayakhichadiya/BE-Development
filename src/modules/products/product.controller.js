@@ -1,11 +1,26 @@
 const catchAsync = require("../../utils/catchAsync");
+const uploadToCloudinary = require("../../utils/uploadToCloudinary");
 const productService = require("./product.service");
 
 const createProduct = async (req, res, next) => {
     try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Please upload an image"
+            })
+        }
+
+        const uploadImage = await uploadToCloudinary(
+            req.file.buffer
+        );
+
         const product = await productService.createProduct(
-            req.body,
-            req.user._id
+            {
+                ...req.body,
+                image: uploadImage.secure_url,
+            },
+            req.user._id,
         );
 
         res.status(201).json({

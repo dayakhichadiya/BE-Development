@@ -1,9 +1,9 @@
 const express = require("express");
-
 const router = express.Router();
 
 const { protect } = require("../../middlewares/auth.middleware");
 const { authorize } = require("../../middlewares/role.middleware")
+const upload = require("../../middlewares/upload.middleware")
 
 const {
     createProduct,
@@ -14,7 +14,14 @@ const {
     getProductWithCategory
 } = require("./product.controller");
 
-router.post("/", protect, authorize("admin"), createProduct);
+router.post(
+    "/",
+    protect,
+    authorize("admin"),
+    upload.single("image"),
+    createProduct
+);
+
 router.get("/category-wise", getProductWithCategory);
 router.get("/:id", getProduct);
 router.put("/:id", protect, authorize("admin"), updateProduct);

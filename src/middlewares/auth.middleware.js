@@ -17,7 +17,8 @@ const protect = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         //get user from database;
-        const user = await User.findById(decoded.userId).select("-password") //why userId because token only conduct userId and role
+        const user = await User.findById(decoded.userId)
+            .select("-password") //why userId because token only conduct userId and role
 
         if (!user) {
             throw new Error("User not Found");
