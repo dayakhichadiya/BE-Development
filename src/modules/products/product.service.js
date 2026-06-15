@@ -13,14 +13,18 @@ const getProduct = async (productId) => {
     const product = await Product.findById(productId)
 
     if (!product) {
-        throw new Error('Product Id not found')
+        throw new Error('Product not found')
     }
     return product;
 }
 
 const getAllProduct = async (query) => {
 
-    const { search, page = 1, limit = 10 } = query;
+    const { search,
+        page = 1,
+        limit = 10,
+        sort
+    } = query;
 
     let filter = {};
 
@@ -41,11 +45,22 @@ const getAllProduct = async (query) => {
         ]
     }
 
+    let sortOption = {};
+
+    if (sort) {
+        if (sort.startsWith("-")) {
+            sortOption[sort.substring(1)] = -1
+        } else {
+            sortOption[sort] = 1
+        }
+    }
+
     const skip = (Number(page) - 1) * Number(limit);
     const totalProducts = await Product.countDocuments(filter);
 
     const products =
         await Product.find(filter)
+            .sort(sortOption)
             .skip(skip)
             .limit(Number(limit));
 
@@ -58,6 +73,14 @@ const getAllProduct = async (query) => {
             limit: Number(limit)
         }
     }
+}
+
+const getProductWithCategory = async () => {
+
+    const products = await Product.find()
+        .populate("category", "name") //give the response with category details.
+        .populate("createdBy", "name email");  //give the name of the product creater
+    return products
 }
 
 const updateProduct = async (productId, payload) => {
@@ -88,4 +111,5 @@ module.exports = {
     getAllProduct,
     updateProduct,
     deleteProduct,
+    getProductWithCategory,
 }

@@ -66,11 +66,12 @@ const changePassword = async (req, res, next) => {
 
 const getAllUser = async (req, res, next) => {
     try {
-        const users = await authService.getAllUser(req.query);
+        const result = await authService.getAllUser(req.query);
         res.status(200).json({
             success: true,
             message: "Successfully fetched all Users",
-            data: users
+            data: result.users,
+            pagination: result.pagination
         })
     } catch (error) {
         next(error);

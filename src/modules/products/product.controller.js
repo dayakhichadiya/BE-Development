@@ -1,10 +1,26 @@
+const catchAsync = require("../../utils/catchAsync");
+const uploadToCloudinary = require("../../utils/uploadToCloudinary");
 const productService = require("./product.service");
 
 const createProduct = async (req, res, next) => {
     try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Please upload an image"
+            })
+        }
+
+        const uploadImage = await uploadToCloudinary(
+            req.file.buffer
+        );
+
         const product = await productService.createProduct(
-            req.body,
-            req.user._id
+            {
+                ...req.body,
+                image: uploadImage.secure_url,
+            },
+            req.user._id,
         );
 
         res.status(201).json({
@@ -18,7 +34,7 @@ const createProduct = async (req, res, next) => {
     }
 };
 
-const getProduct = async (req, res) => {
+const getProduct = async (req, res, next) => {
     try {
         const product = await productService.getProduct(req.params.id)
 
@@ -34,7 +50,6 @@ const getProduct = async (req, res) => {
 const getAllProduct = async (req, res, next) => {
     try {
         const result = await productService.getAllProduct(req.query);
-        console.log("🚀 ~ getAllProduct ~ result:", result)
         res.status(200).json({
             success: true,
             message: "Fetch all Products",
@@ -45,6 +60,17 @@ const getAllProduct = async (req, res, next) => {
         next(error);
     }
 }
+
+const getProductWithCategory = catchAsync(async (req, res, next) => { //why catchAsync <- no need to write everywhere try/catch
+
+    const product = await productService.getProductWithCategory();
+    res.status(200).json({
+        success: true,
+        message: "Fetch all Products",
+        data: product,
+    })
+
+})
 
 const updateProduct = async (req, res, next) => {
     try {
@@ -79,5 +105,6 @@ module.exports = {
     getProduct,
     updateProduct,
     deleteProduct,
-    getAllProduct
+    getAllProduct,
+    getProductWithCategory
 };
