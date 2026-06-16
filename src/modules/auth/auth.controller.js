@@ -33,6 +33,13 @@ const login = async (req, res, next) => {
     }
 }
 
+const logout = async (req, res, next) => {
+    res.statu(s200).json({
+        success: true,
+        nessage: "logut successfuuly"
+    })
+}
+
 const getProfile = (req, res) => {
     res.status(200).json({
         success: true,
@@ -81,6 +88,7 @@ const getAllUser = async (req, res, next) => {
 module.exports = {
     register,
     login,
+    logout,
     getProfile,
     getAllUser,
     updateProfile,
