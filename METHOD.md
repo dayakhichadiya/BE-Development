@@ -188,3 +188,33 @@ req.file = {
   mimetype: "image/jpeg",
   buffer: <Binary Data>
 }
+
+200 OK
+201 Created
+400 Bad Request
+401 Unauthorized
+403 Forbidden
+404 Not Found
+500 Internal Server Error
+
+Aggregation is used when you  want:                                                                                            
+Reports
+Analytics
+Dashboards
+Statistics
+Revenue
+Charts
+
+ex: 
+Total Revenue
+Total Orders
+Monthly Sales
+Top Selling Products
+Most Active Users
+
+1. $match
+2. $group
+3. $project
+4. $sort
+5. $lookup
+6. Dashboard APIs

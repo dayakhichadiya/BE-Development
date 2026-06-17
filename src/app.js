@@ -5,6 +5,7 @@ const authRoutes = require("./modules/auth/auth.routes")
 const productRoutes = require("./modules/products/product.routes");
 const categoryRoutes = require("./modules/categories/category.routes");
 const cartRoutes = require("./modules/cart/cart.routes");
+const orderRoutes = require("./modules/orders/order.routes");
 const ErrorHandler = require('./middlewares/error.middleware');
 const app = express();
 
@@ -15,7 +16,8 @@ app.use(express.json());   // Express can't read JSON automatically   without ex
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
-app.use("/api/cart", cartRoutes)
+app.use("/api/cart", cartRoutes);
+app.use("/api/order", orderRoutes);
 
 
 // TEST CONNECTION WITH WEB
