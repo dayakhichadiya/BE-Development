@@ -20,7 +20,8 @@ const getProduct = async (productId) => {
 
 const getAllProduct = async (query) => {
 
-    const { search,
+    const {
+        search,
         page = 1,
         limit = 10,
         sort
