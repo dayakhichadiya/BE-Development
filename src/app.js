@@ -6,6 +6,7 @@ const productRoutes = require("./modules/products/product.routes");
 const categoryRoutes = require("./modules/categories/category.routes");
 const cartRoutes = require("./modules/cart/cart.routes");
 const orderRoutes = require("./modules/orders/order.routes");
+const adminRoutes = require("./modules/admin/admin.routes")
 const ErrorHandler = require('./middlewares/error.middleware');
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 // TEST CONNECTION WITH WEB
